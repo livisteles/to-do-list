@@ -14,8 +14,10 @@ function addTarefa(event) {
     const tarefa = {
       id: id,
       valor: novaTarefa,
-      concluido: false
+      prioridade: 1,
+      concluido: false,
     }
+
     id++
     tarefas.value.push(tarefa)
     pegarTarefas.value = ''
@@ -27,17 +29,30 @@ function excluirTarefa(id) {
   if (tarefaIndex === -1) {
     return
   }
-  let confirmar = confirm('Deseja realmente excluir a tarefa?')
+  
+  let tarefa = tarefas.value[tarefaIndex]
+
+  let confirmar = confirm(`Deseja realmente excluir a tarefa "${tarefa.valor}"?`)
 
   if (confirmar == true) {
     tarefas.value.splice(tarefaIndex, 1)
   }
 }
 
-//filtrando os tipos de tarefas
-const tarefasNaoConcluidas = computed(() => tarefas.value.filter(tarefa => !tarefa.concluido))
+function mudarPrioridade(id, prioridade) {
+  let tarefa = tarefas.value.find(tarefa => tarefa.id === id)
+  if (!tarefa) {
+    return
+  }
+
+  tarefa.prioridade = prioridade
+}
+
+//filtrando os tipos de tarefas e ordenando por prioridade
+const tarefasNaoConcluidas = computed(() => tarefas.value.filter(tarefa => !tarefa.concluido).sort((a, b) => b.prioridade - a.prioridade))
 
 const tarefasConcluidas = computed(() => tarefas.value.filter(tarefa => tarefa.concluido))
+
 </script>
 
 <template>
@@ -59,7 +74,12 @@ const tarefasConcluidas = computed(() => tarefas.value.filter(tarefa => tarefa.c
             <div class="tarefa" v-for="tarefa in tarefasNaoConcluidas" :key="tarefa.id">
 
               <span>{{ tarefa.valor }}</span>
-
+              <select class="prioridade" @change="mudarPrioridade(tarefa.id, $event.target.value)"
+              v-model="tarefa.prioridade">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
               <div class="checkbox">
                 <input type="checkbox" v-model="tarefa.concluido">
                 <img src="../public/checked.svg" alt="">
@@ -204,20 +224,46 @@ form {
 
   .tarefa {
     display: flex;
+    border-radius: 4px;
     align-items: center;
     border: 1px solid #68378e;
     border-radius: 4px;
     padding: 6px;
     text-transform: capitalize;
+    gap: 4px;
+
+    .prioridade {
+      border: 1px solid #68378e;
+      border-radius: 4px;
+      min-width: 22px;
+      width: 22px;
+      height: 22px;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      text-indent: 1px;
+      text-overflow: '';
+      text-align: center
+    }
 
     span {
       width: 100%;
     }
 
     button {
-      height: 24px;
+      height: 22px;
       border: none;
       background: transparent;
+      border: 1px solid #68378e;
+      border-radius: 4px;
+      width: 22px;
+      min-width: 22px;
+
+      img {
+        object-fit: cover;
+        height: 100%;
+        width: 100%;
+      }
 
       &:hover {
         cursor: pointer;
@@ -226,6 +272,7 @@ form {
 
     .checkbox {
       height: 22px;
+      min-width: 22px;
       width: 22px;
       border: 1px solid #68378e;
       position: relative;

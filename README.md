@@ -1,29 +1,30 @@
-# to-do-list
+# App Lista de Tarefas
+### Seu Assistente Pessoal de Organização!
 
-This template should help get you started developing with Vue 3 in Vite.
+Bem-vindo ao App Lista de Tarefas, o seu novo melhor amigo para manter a vida organizada e produtiva! Com um design simples e intuitivo, nosso aplicativo ajuda você a acompanhar suas tarefas diárias, metas e projetos de forma eficiente.
 
-## Recommended IDE Setup
+## Funcionalidades principais:
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+### Interface Amigável:
+  Design limpo e intuitivo, fácil de usar para todas as idades.
+  <div align="center">
+    <img width="1262px" title="Interface Amigável" src="./docs/interface.png"/>
+  </div>
 
-## Customize configuration
+### Adicionar Tarefas: 
+  Crie novas tarefas rapidamente com apenas alguns clicks.
+   <div align="center">
+    <img width="469px" title="Adicionar Tarefas" src="./docs/adicionar.png"/>
+  </div>
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+### Excluir Tarefas: 
+Remova facilmente tarefas que você não precisa mais, mantendo sua lista sempre atualizada.
+ <div align="center">
+    <img width="692px" title="Excluir Tarefas" src="./docs/excluir.png"/>
+  </div>
 
-## Project Setup
+### Definir Prioridades: 
+Marque tarefas importantes para que você saiba no que focar primeiro.
+![](./docs/prioridade.png)
 
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+Seja para estudar, trabalhar ou apenas para organizar sua rotina diária, o App Lista de Tarefas está aqui para ajudar você a alcançar seus objetivos de maneira mais simples e eficaz. Comece a transformar sua vida com mais organização e produtividade!
