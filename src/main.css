@@ -1,0 +1,11 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; 
+}
+
+body {
+    background: linear-gradient(#d6aeeb,#68378e);
+    height: 100vh;
+    font-family: sans-serif;
+}
