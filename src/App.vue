@@ -1,10 +1,38 @@
 <script setup>
 import { computed, ref } from 'vue';
+import { Axios } from "axios"
 
 let pegarTarefas = ref('')
 
 let tarefas = ref([])
 let id = 1
+
+const apiClient = new Axios({
+  baseURL: "http://localhost:3000"
+})
+
+// async e await: 
+// - async: é uma função assíncrona, roda sem atrapalhar o fluxo dos códigos
+// - await: usado para aguardar as funções assíncronas
+async function recuperarTarefas() {
+  // resposta da requisição
+  let response = await apiClient.get("/tarefas")
+
+  tarefas.value = JSON.parse(response.data).map((tarefa) => {
+    tarefa.id = parseInt(tarefa.id)
+
+    return tarefa
+  })
+
+  for (let tarefa of tarefas.value) {
+    if (id <= tarefa.id) {
+      id = tarefa.id + 1
+    }
+  }
+}
+
+recuperarTarefas() // chamando a função que vai recuperar as tarefas
+
 
 function addTarefa(event) {
   event.preventDefault()
@@ -18,6 +46,17 @@ function addTarefa(event) {
       concluido: false,
     }
 
+    const tarefaString = {
+      ...tarefa,
+      id: id.toString(),
+    }
+    // enviando a nova tarefa
+    apiClient.post("/tarefas", JSON.stringify(tarefaString), {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+
     id++
     tarefas.value.push(tarefa)
     pegarTarefas.value = ''
@@ -29,13 +68,16 @@ function excluirTarefa(id) {
   if (tarefaIndex === -1) {
     return
   }
-  
+
   let tarefa = tarefas.value[tarefaIndex]
 
   let confirmar = confirm(`Deseja realmente excluir a tarefa "${tarefa.valor}"?`)
 
   if (confirmar == true) {
     tarefas.value.splice(tarefaIndex, 1)
+
+    // deletando a tarefa pelo id
+    apiClient.delete(`/tarefas/${tarefa.id}`)
   }
 }
 
@@ -46,12 +88,39 @@ function mudarPrioridade(id, prioridade) {
   }
 
   tarefa.prioridade = prioridade
+
+  // atualiza só uma propriedade 
+  apiClient.patch(`/tarefas/${tarefa.id}`, JSON.stringify({ prioridade: prioridade.toString() }), {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
 }
 
-//filtrando os tipos de tarefas e ordenando por prioridade
+// filtrando os tipos de tarefas e ordenando por prioridade
 const tarefasNaoConcluidas = computed(() => tarefas.value.filter(tarefa => !tarefa.concluido).sort((a, b) => b.prioridade - a.prioridade))
 
 const tarefasConcluidas = computed(() => tarefas.value.filter(tarefa => tarefa.concluido))
+
+function concluirTarefa(id, concluido) {
+  const tarefa = tarefas.value.find(tarefa => tarefa.id === id)
+  if (!tarefa) {
+    return
+  }
+
+
+
+ 
+ 
+    apiClient.patch(`/tarefas/${tarefa.id}`, JSON.stringify({ concluido: concluido }), {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+ 
+
+}
+
 
 </script>
 
@@ -75,13 +144,13 @@ const tarefasConcluidas = computed(() => tarefas.value.filter(tarefa => tarefa.c
 
               <span>{{ tarefa.valor }}</span>
               <select class="prioridade" @change="mudarPrioridade(tarefa.id, $event.target.value)"
-              v-model="tarefa.prioridade">
+                v-model="tarefa.prioridade">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
               </select>
               <div class="checkbox">
-                <input type="checkbox" v-model="tarefa.concluido">
+                <input type="checkbox" v-model="tarefa.concluido" @change="concluirTarefa(tarefa.id, tarefa.concluido)">
                 <img src="../public/checked.svg" alt="">
               </div>
 
@@ -110,7 +179,7 @@ const tarefasConcluidas = computed(() => tarefas.value.filter(tarefa => tarefa.c
               <span>{{ tarefa.valor }}</span>
 
               <div class="checkbox">
-                <input type="checkbox" v-model="tarefa.concluido">
+                <input type="checkbox" v-model="tarefa.concluido" @change="concluirTarefa(tarefa.id, tarefa.concluido)">
                 <img src="../public/checked.svg" alt="">
               </div>
 

@@ -29,4 +29,4 @@ Marque tarefas importantes para que você saiba no que focar primeiro.
     <img width="477px" title="Definir Prioridades" src="./docs/prioridade.png"/>
   </div>
 
-Seja para estudar, trabalhar ou apenas para organizar sua rotina diária, o App Lista de Tarefas está aqui para ajudar você a alcançar seus objetivos de maneira mais simples e eficaz. Comece a transformar sua vida com mais organização e produtividade!
+Seja para estudar, trabalhar ou apenas para organizar sua rotina diária, a Lista de Tarefas está aqui para ajudar você a alcançar seus objetivos de maneira mais simples e eficaz. Comece a transformar sua vida com mais organização e produtividade!
